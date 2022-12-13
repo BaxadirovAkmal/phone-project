@@ -8,24 +8,19 @@ import {changePageHandler} from '../store/actions/placeOrderActions';
 import {setProductToMoreDetails} from "../store/actions/productDetailsActions";
 
 let time;
-const PlaceOrder = (props) => {
+const PlaceOrder = () => {
     const {placeOrderList, paginationData} = useSelector((state) => state.placeOrder)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [form] = Form.useForm();
     const searchValue = Form.useWatch('search', form);
 
-    console.log('props +++', props)
     useEffect(() => {
         dispatch(getAllProducts({
             limit: paginationData.limit,
             skip: paginationData.start
         }))
-    }, [paginationData])
-
-    useEffect(() => {
-        if (searchValue) onSearch()
-    }, [searchValue])
+    }, [paginationData, dispatch])
 
     const onSearch = () => {
         clearTimeout(time)
@@ -37,6 +32,12 @@ const PlaceOrder = (props) => {
             }))
         }, 400)
     }
+
+    useEffect(() => {
+        if (searchValue) onSearch()
+    }, [searchValue])
+
+
 
     const onFinish = (values) => {
         console.log('Success:', values);
